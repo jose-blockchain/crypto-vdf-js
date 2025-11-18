@@ -126,19 +126,21 @@ export function generateProof(
   const finalT = calculateFinalT(iterations, delta);
   
   let roundIndex = 0;
+  let denominator = 2; // Start with 2^1, will double each round
   
   while (currT !== finalT) {
     const halfT = currT >> 1;
     ts.push(halfT);
-    
-    const denominator = 1 << (roundIndex + 1);
     
     let mu: ClassGroup;
     if (roundIndex < i) {
       mu = identity.clone();
       
       for (let numerator = 1; numerator < denominator; numerator += 2) {
-        const numBits = 62 - Math.clz32(denominator);
+        // numBits represents the round index (0-based)
+        // For denominator = 2^(roundIndex+1), numBits = roundIndex
+        // This matches Rust's: 62 - denominator.leading_zeros()
+        const numBits = roundIndex;
         let rProd = 1n;
         
         for (let b = numBits - 1; b >= 0; b--) {
@@ -190,6 +192,7 @@ export function generateProof(
     }
     
     roundIndex++;
+    denominator *= 2; // Double for next round: 2, 4, 8, 16, ...
   }
   
   return mus;

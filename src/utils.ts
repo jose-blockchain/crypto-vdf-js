@@ -262,12 +262,12 @@ export function setBit(n: bigint, bit: number): bigint {
  * Convert number to 8-byte big-endian representation
  */
 export function u64ToBytes(n: number | bigint): Uint8Array {
-  const value = typeof n === 'number' ? BigInt(n) : n;
+  let value = typeof n === 'number' ? BigInt(n) : n;
   const bytes = new Uint8Array(8);
   
   for (let i = 7; i >= 0; i--) {
     bytes[i] = Number(value & 0xFFn);
-    n = typeof n === 'bigint' ? (n as bigint) >> 8n : Math.floor((n as number) / 256);
+    value = value >> 8n;
   }
   
   return bytes;

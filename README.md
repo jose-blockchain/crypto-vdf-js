@@ -81,9 +81,9 @@ console.log('✓ Proof verified!');
   <button onclick="runVDF()">Run VDF</button>
   <pre id="output"></pre>
 
-  <script src="node_modules/crypto-vdf/dist/browser/vdf.min.js"></script>
-  <script>
-    async function runVDF() {
+<script src="node_modules/crypto-vdf/dist/browser/vdf.min.js"></script>
+<script>
+  async function runVDF() {
       const output = document.getElementById('output');
       output.textContent = 'Running VDF...\n';
       
@@ -324,6 +324,7 @@ const vdf = params.new();
 // ⚠️ Constraints:
 // - Difficulty must be even
 // - Difficulty must be >= 66
+// - Difficulty must be <= 7000 (JavaScript limitation, use Wesolowski for higher)
 const proof = await vdf.solve(challenge, 100, DISCRIMINANT_256);
 vdf.verify(challenge, 100, proof, DISCRIMINANT_256);
 ```
@@ -501,6 +502,10 @@ This JavaScript port maintains API compatibility with the Rust version while ada
 - Async/await for potentially long-running operations
 - TypeScript for type safety
 - Browser-compatible (no native dependencies)
+
+### Known Limitations
+
+**Pietrzak VDF**: Currently supports difficulties up to 7000. For difficulties above 7000, use **Wesolowski VDF** which has no such limitation and is the recommended choice for most applications.
 
 ## Contributing
 

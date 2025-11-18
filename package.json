@@ -1,6 +1,6 @@
 {
   "name": "crypto-vdf",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Verifiable Delay Functions (VDF) library for Node.js and browsers - Pietrzak and Wesolowski implementations",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

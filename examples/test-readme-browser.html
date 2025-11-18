@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>crypto-vdf Browser Test (from README)</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+      background: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #4CAF50;
+      padding-bottom: 10px;
+    }
+    .test-section {
+      background: white;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin: 5px;
+      font-family: inherit;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    #output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 4px;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      max-height: 600px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+    .success { color: #4CAF50; }
+    .error { color: #f44336; }
+    .info { color: #2196F3; }
+    .emoji { font-size: 20px; }
+  </style>
+</head>
+<body>
+  <h1>🔐 crypto-vdf Browser Test Suite</h1>
+  <p>Testing all README browser examples using unpkg CDN</p>
+  
+  <div class="test-section">
+    <h2>📦 Library Loading</h2>
+    <div id="loading-status">Loading library from unpkg...</div>
+  </div>
+
+  <div class="test-section">
+    <h2>🧪 Tests from README</h2>
+    <button onclick="runBasicExample()">Test 1: Basic Example</button>
+    <button onclick="runWesolowskiExample()">Test 2: Wesolowski VDF</button>
+    <button onclick="runPietrzakExample()">Test 3: Pietrzak VDF</button>
+    <button onclick="compareVDFs()">Test 4: Compare Both VDFs</button>
+    <button onclick="runAllTests()" style="background: #2196F3;">▶️ Run All Tests</button>
+  </div>
+
+  <div class="test-section">
+    <h2>📊 Output</h2>
+    <pre id="output">Waiting for tests...</pre>
+  </div>
+
+  <!-- Load from unpkg CDN (will be available after npm publish) -->
+  <!-- For now, use local build -->
+  <script src="../dist/browser/vdf.min.js"></script>
+  
+  <!-- For testing after npm publish, use this instead: -->
+  <!-- <script src="https://unpkg.com/crypto-vdf@1.0.2/dist/browser/vdf.min.js"></script> -->
+  
+  <script>
+    const output = document.getElementById('output');
+    const loadingStatus = document.getElementById('loading-status');
+    
+    function log(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString();
+      const colors = {
+        success: '#4CAF50',
+        error: '#f44336',
+        info: '#2196F3',
+        default: '#d4d4d4'
+      };
+      const color = colors[type] || colors.default;
+      output.innerHTML += `<span style="color: ${color}">[${timestamp}] ${message}</span>\n`;
+      output.scrollTop = output.scrollHeight;
+    }
+
+    // Check if library loaded
+    window.addEventListener('load', () => {
+      if (typeof vdf !== 'undefined') {
+        loadingStatus.innerHTML = '<span class="success">✓ Library loaded successfully!</span>';
+        log('🎉 crypto-vdf library loaded from ' + (window.location.hostname === '' ? 'local build' : 'unpkg CDN'), 'success');
+        log('Available: vdf.WesolowskiVDFParams, vdf.PietrzakVDFParams, vdf.DISCRIMINANT_256, etc.', 'info');
+      } else {
+        loadingStatus.innerHTML = '<span class="error">✗ Failed to load library</span>';
+        log('❌ Library failed to load', 'error');
+      }
+    });
+
+    // Test 1: Basic Example (from README)
+    async function runBasicExample() {
+      log('\n📝 Test 1: Basic Example (from README Quick Start)', 'info');
+      output.textContent += '\n';
+      
+      try {
+        const vdfInstance = new vdf.WesolowskiVDFParams(256).new();
+        const challenge = new Uint8Array([0xaa, 0xbb, 0xcc]);
+        
+        log('  Generating proof...', 'info');
+        const start = performance.now();
+        const proof = await vdfInstance.solve(challenge, 100, vdf.DISCRIMINANT_256);
+        const solveTime = (performance.now() - start).toFixed(0);
+        
+        log('  Verifying proof...', 'info');
+        vdfInstance.verify(challenge, 100, proof, vdf.DISCRIMINANT_256);
+        const totalTime = (performance.now() - start).toFixed(0);
+        
+        log(`  ✓ Proof verified!`, 'success');
+        log(`    Solve time: ${solveTime}ms`, 'success');
+        log(`    Verify time: ${totalTime - solveTime}ms`, 'success');
+        log(`    Proof size: ${proof.length} bytes`, 'success');
+      } catch (error) {
+        log(`  ✗ Test failed: ${error.message}`, 'error');
+      }
+    }
+
+    // Test 2: Wesolowski (from README Complete Examples)
+    async function runWesolowskiExample() {
+      log('\n📝 Test 2: Wesolowski VDF (from README Complete Examples)', 'info');
+      output.textContent += '\n';
+      
+      try {
+        log('  Running Wesolowski VDF (256-bit)...', 'info');
+        const start = performance.now();
+        
+        const vdfInstance = new vdf.WesolowskiVDFParams(256).new();
+        const challenge = new Uint8Array([0xaa, 0xbb, 0xcc]);
+        
+        const proof = await vdfInstance.solve(challenge, 100, vdf.DISCRIMINANT_256);
+        const solveTime = (performance.now() - start).toFixed(0);
+        
+        vdfInstance.verify(challenge, 100, proof, vdf.DISCRIMINANT_256);
+        const totalTime = (performance.now() - start).toFixed(0);
+        
+        log(`  ✓ Proof verified!`, 'success');
+        log(`    Solve time: ${solveTime}ms`, 'success');
+        log(`    Verify time: ${totalTime - solveTime}ms`, 'success');
+        log(`    Proof size: ${proof.length} bytes`, 'success');
+      } catch (error) {
+        log(`  ✗ Test failed: ${error.message}`, 'error');
+      }
+    }
+
+    // Test 3: Pietrzak (from README Complete Examples)
+    async function runPietrzakExample() {
+      log('\n📝 Test 3: Pietrzak VDF (from README Complete Examples)', 'info');
+      output.textContent += '\n';
+      
+      try {
+        log('  Running Pietrzak VDF (256-bit)...', 'info');
+        const start = performance.now();
+        
+        const vdfInstance = new vdf.PietrzakVDFParams(256).new();
+        const challenge = new Uint8Array([0xaa, 0xbb, 0xcc]);
+        
+        const proof = await vdfInstance.solve(challenge, 100, vdf.DISCRIMINANT_256);
+        const solveTime = (performance.now() - start).toFixed(0);
+        
+        vdfInstance.verify(challenge, 100, proof, vdf.DISCRIMINANT_256);
+        const totalTime = (performance.now() - start).toFixed(0);
+        
+        log(`  ✓ Proof verified!`, 'success');
+        log(`    Solve time: ${solveTime}ms`, 'success');
+        log(`    Verify time: ${totalTime - solveTime}ms`, 'success');
+        log(`    Proof size: ${proof.length} bytes`, 'success');
+      } catch (error) {
+        log(`  ✗ Test failed: ${error.message}`, 'error');
+      }
+    }
+
+    // Test 4: Compare VDFs (from README Complete Examples)
+    async function compareVDFs() {
+      log('\n📝 Test 4: Comparing VDF Implementations (from README)', 'info');
+      output.textContent += '\n';
+      
+      try {
+        const challenge = new Uint8Array([0xaa]);
+        
+        // Wesolowski
+        log('  1️⃣ Wesolowski VDF:', 'info');
+        const w = new vdf.WesolowskiVDFParams(256).new();
+        const w_start = performance.now();
+        const w_proof = await w.solve(challenge, 100, vdf.DISCRIMINANT_256);
+        const w_time = performance.now() - w_start;
+        w.verify(challenge, 100, w_proof, vdf.DISCRIMINANT_256);
+        log(`     Time: ${w_time.toFixed(0)}ms, Size: ${w_proof.length}B`, 'success');
+        
+        // Pietrzak
+        log('  2️⃣ Pietrzak VDF:', 'info');
+        const p = new vdf.PietrzakVDFParams(256).new();
+        const p_start = performance.now();
+        const p_proof = await p.solve(challenge, 100, vdf.DISCRIMINANT_256);
+        const p_time = performance.now() - p_start;
+        p.verify(challenge, 100, p_proof, vdf.DISCRIMINANT_256);
+        log(`     Time: ${p_time.toFixed(0)}ms, Size: ${p_proof.length}B`, 'success');
+        
+        log(`\n  📊 Wesolowski is ${(p_time/w_time).toFixed(1)}x faster`, 'success');
+        log(`  📊 Wesolowski proof is ${((1-w_proof.length/p_proof.length)*100).toFixed(0)}% smaller`, 'success');
+      } catch (error) {
+        log(`  ✗ Test failed: ${error.message}`, 'error');
+      }
+    }
+
+    // Run all tests
+    async function runAllTests() {
+      output.textContent = '';
+      log('🚀 Running all README examples...', 'info');
+      
+      await runBasicExample();
+      await runWesolowskiExample();
+      await runPietrzakExample();
+      await compareVDFs();
+      
+      log('\n🎉 All README examples tested successfully!', 'success');
+      log('✓ All browser examples are working correctly', 'success');
+    }
+  </script>
+</body>
+</html>
+

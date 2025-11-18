@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "build": "npm run build:node && npm run build:browser",
-    "build:node": "tsc && tsc --module esnext --outDir dist/esm && mv dist/esm/index.js dist/index.mjs",
+    "build:node": "tsc && tsc --module esnext --outDir dist/esm && node scripts/fix-esm-imports.js && mv dist/esm/index.js dist/index.mjs",
     "build:browser": "webpack --config webpack.config.js",
     "test": "npm run test:unit && npm run test:vdf",
     "test:unit": "jest tests/utils.test.ts tests/classgroup.test.ts tests/discriminant.test.ts tests/vdf.test.ts --runInBand",

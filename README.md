@@ -134,14 +134,14 @@ await vdf512.solve(challenge, 100, disc);
 ```
 
 **Why use precomputed discriminants?**
-- ⚡ **Fast**: Generated using Rust GMP (1000x faster than pure JS)
-- ✅ **Verified**: All satisfy required mathematical properties
-- 🔒 **Deterministic**: Same values every time, production-ready
-- 🎯 **Recommended**: For all production use cases
+- **Fast**: Generated using Rust GMP (1000x faster than pure JS)
+- **Verified**: All satisfy required mathematical properties
+- **Deterministic**: Same values every time, production-ready
+- **Recommended**: For all production use cases
 
 ### Custom Discriminants (Not Recommended)
 
-⚠️ **Warning**: Generating custom discriminants in pure JavaScript is **very slow** (can take minutes). Only use if you have specific requirements.
+**Warning**: Generating custom discriminants in pure JavaScript is **very slow** (can take minutes). Only use if you have specific requirements.
 
 ```javascript
 import { createDiscriminant } from 'crypto-vdf';
@@ -203,7 +203,7 @@ try {
   </style>
 </head>
 <body>
-  <h1>🔐 Verifiable Delay Function Demo</h1>
+  <h1>Verifiable Delay Function Demo</h1>
   <p>Click to run a VDF proof (takes a few seconds)</p>
   
   <button onclick="runWesolowski()">Run Wesolowski VDF</button>
@@ -217,7 +217,7 @@ try {
     const output = document.getElementById('output');
     
     async function runWesolowski() {
-      output.textContent = '🚀 Running Wesolowski VDF (256-bit)...\n';
+      output.textContent = 'Running Wesolowski VDF (256-bit)...\n';
       const start = performance.now();
       
       const vdfInstance = new vdf.WesolowskiVDFParams(256).new();
@@ -236,7 +236,7 @@ try {
     }
     
     async function runPietrzak() {
-      output.textContent = '🚀 Running Pietrzak VDF (256-bit)...\n';
+      output.textContent = 'Running Pietrzak VDF (256-bit)...\n';
       const start = performance.now();
       
       const vdfInstance = new vdf.PietrzakVDFParams(256).new();
@@ -255,12 +255,12 @@ try {
     }
     
     async function compareVDFs() {
-      output.textContent = '🔬 Comparing VDF implementations...\n\n';
+      output.textContent = 'Comparing VDF implementations...\n\n';
       
       const challenge = new Uint8Array([0xaa]);
       
       // Wesolowski
-      output.textContent += '1️⃣ Wesolowski VDF:\n';
+      output.textContent += '1. Wesolowski VDF:\n';
       const w = new vdf.WesolowskiVDFParams(256).new();
       const w_start = performance.now();
       const w_proof = await w.solve(challenge, 100, vdf.DISCRIMINANT_256);
@@ -269,7 +269,7 @@ try {
       output.textContent += `   Time: ${w_time.toFixed(0)}ms, Size: ${w_proof.length}B\n\n`;
       
       // Pietrzak
-      output.textContent += '2️⃣ Pietrzak VDF:\n';
+      output.textContent += '2. Pietrzak VDF:\n';
       const p = new vdf.PietrzakVDFParams(256).new();
       const p_start = performance.now();
       const p_proof = await p.solve(challenge, 100, vdf.DISCRIMINANT_256);

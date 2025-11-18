@@ -8,7 +8,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-green.svg)](https://nodejs.org/)
 [![GitHub stars](https://img.shields.io/github/stars/jose-blockchain/crypto-vdf-js.svg?style=social)](https://github.com/jose-blockchain/crypto-vdf-js/stargazers)
 
-Verifiable Delay Functions (VDF) library for Node.js and browsers. This is a JavaScript/TypeScript port of the [Rust VDF implementation](https://github.com/poanetwork/vdf) by Chia Network Inc and POA Networks Ltd.
+Verifiable Delay Functions (VDF) library for Node.js and browsers. Pure TypeScript implementation with precomputed discriminants for optimal performance.
 
 ## What is a VDF?
 

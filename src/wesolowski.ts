@@ -1,4 +1,3 @@
-// Copyright 2018 POA Networks Ltd.
 // Copyright 2025 VDF-JS Contributors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");

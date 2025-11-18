@@ -58,6 +58,6 @@ Maintains API compatibility with the Rust implementation while adapting to JavaS
 4. Publish: `npm publish` (when ready)
 
 ### Credits
-Based on the Rust VDF implementation by Chia Network Inc and POA Networks Ltd.
-JavaScript port by jose-blockchain.
+Pure TypeScript implementation of Verifiable Delay Functions.
+Developed by jose-blockchain and VDF-JS contributors.
 

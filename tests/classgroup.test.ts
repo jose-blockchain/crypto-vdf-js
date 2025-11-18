@@ -427,7 +427,7 @@ describe('ClassGroup', () => {
   });
 
   test('should maintain discriminant through multiple operations', () => {
-    let elem = generator.clone();
+    const elem = generator.clone();
     
     // Perform various operations
     elem.square();

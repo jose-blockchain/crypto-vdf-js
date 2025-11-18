@@ -50,8 +50,8 @@ function extendedGCD(a: bigint, b: bigint): [bigint, bigint, bigint] {
  * Three-way GCD: gcd(a, b, c)
  */
 function threeGCD(a: bigint, b: bigint, c: bigint): bigint {
-  const [g1, _, __] = extendedGCD(a, b);
-  const [g2, ___, ____] = extendedGCD(g1, c);
+  const [g1] = extendedGCD(a, b);
+  const [g2] = extendedGCD(g1, c);
   return g2;
 }
 
@@ -66,7 +66,7 @@ function solveLinearCongruence(a: bigint, b: bigint, m: bigint): [bigint, bigint
   
   // Extended GCD to get g = gcd(a, m) and Bezout coefficients
   // g = a*d + m*e (we need d)
-  const [g, d, _e] = extendedGCD(a, mAbs);
+  const [g, d] = extendedGCD(a, mAbs);
   
   // CRITICAL: Check exact division - Rust uses divexact which requires this
   // In debug mode, Rust asserts b % g == 0

@@ -25,13 +25,13 @@
     "build:browser": "webpack --config webpack.config.js",
     "test": "npm run test:unit && npm run test:vdf",
     "test:unit": "jest tests/utils.test.ts tests/classgroup.test.ts tests/discriminant.test.ts tests/vdf.test.ts --runInBand",
-    "test:vdf": "npm run build && node tests/manual/test-vdf-complete.js",
+    "test:vdf": "npm run build:node && node tests/manual/test-vdf-complete.js",
     "test:vdf:quick": "node tests/manual/test-vdf-complete.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint src/**/*.ts tests/**/*.ts --max-warnings 0",
     "lint:fix": "eslint src/**/*.ts tests/**/*.ts --fix",
-    "prepublishOnly": "npm run lint && npm run build && npm test",
+    "prepublishOnly": "npm run lint && npm run build:node && npm run test:unit",
     "clean": "rm -rf dist coverage"
   },
   "keywords": [

@@ -536,4 +536,14 @@ limitations under the License.
 - [Simple Verifiable Delay Functions](https://eprint.iacr.org/2018/627.pdf) - Pietrzak, 2018
 - [Efficient Verifiable Delay Functions](https://eprint.iacr.org/2018/623.pdf) - Wesolowski, 2018
 - [VDF Research](https://vdfresearch.org/)
+- [POA Network VDF Rust Implementation](https://github.com/poanetwork/vdf) - Reference implementation by Chia Network Inc and POA Networks Ltd
+
+## Acknowledgments
+
+This TypeScript implementation references the algorithms and approaches from the [Rust VDF implementation](https://github.com/poanetwork/vdf) originally developed by **Chia Network Inc** and **POA Networks Ltd**. While this is an independent implementation in TypeScript with significant optimizations (including Rust GMP-generated precomputed discriminants), we acknowledge their pioneering work in making VDFs practical and accessible.
+
+Special thanks to:
+- **Chia Network Inc** - For their research and development of practical VDF implementations
+- **POA Networks Ltd** - For their contributions to the VDF ecosystem
+- The broader VDF research community for advancing this important cryptographic primitive
 

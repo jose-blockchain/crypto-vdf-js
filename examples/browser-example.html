@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VDF-JS Browser Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover { background: #0056b3; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    .output {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    .success { color: #28a745; }
+    .info { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>VDF-JS Browser Example</h1>
+  <p>Click the buttons to run Verifiable Delay Function proofs in your browser.</p>
+  
+  <button onclick="runPietrzak()" id="btnPietrzak">Run Pietrzak VDF</button>
+  <button onclick="runWesolowski()" id="btnWesolowski">Run Wesolowski VDF</button>
+  
+  <div class="output" id="output">Output will appear here...</div>
+
+  <script src="../dist/browser/vdf.min.js"></script>
+  <script>
+    function log(msg, type = 'info') {
+      const output = document.getElementById('output');
+      const span = document.createElement('span');
+      span.className = type;
+      span.textContent = msg + '\n';
+      output.appendChild(span);
+    }
+
+    function clearOutput() {
+      document.getElementById('output').innerHTML = '';
+    }
+
+    async function runPietrzak() {
+      clearOutput();
+      const btn = document.getElementById('btnPietrzak');
+      btn.disabled = true;
+      
+      try {
+        log('Pietrzak VDF (256-bit)');
+        log('===================\n');
+        
+        const challenge = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
+        const difficulty = 100;
+        
+        log(`Challenge: ${Array.from(challenge).join(',')}`);
+        log(`Difficulty: ${difficulty} iterations\n`);
+        
+        const pietrzakVdf = new vdf.PietrzakVDFParams(256).new();
+        
+        log('Solving...');
+        const start = Date.now();
+        const proof = await vdf.solve(challenge, difficulty);
+        const solveTime = Date.now() - start;
+        log(`Solved in ${solveTime}ms\n`);
+        
+        log('Verifying...');
+        const verifyStart = Date.now();
+        vdf.verify(challenge, difficulty, proof);
+        const verifyTime = Date.now() - verifyStart;
+        log(`Verified in ${verifyTime}ms\n`);
+        
+        log('✓ Proof verified successfully!', 'success');
+      } catch (error) {
+        log(`Error: ${error.message}`, 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function runWesolowski() {
+      clearOutput();
+      const btn = document.getElementById('btnWesolowski');
+      btn.disabled = true;
+      
+      try {
+        log('Wesolowski VDF (256-bit)');
+        log('=======================\n');
+        
+        const challenge = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
+        const difficulty = 100;
+        
+        log(`Challenge: ${Array.from(challenge).join(',')}`);
+        log(`Difficulty: ${difficulty} iterations\n`);
+        
+        const wesolowskiVdf = new vdf.WesolowskiVDFParams(256).new();
+        
+        log('Solving...');
+        const start = Date.now();
+        const proof = await vdf.solve(challenge, difficulty);
+        const solveTime = Date.now() - start;
+        log(`Solved in ${solveTime}ms\n`);
+        
+        log('Verifying...');
+        const verifyStart = Date.now();
+        vdf.verify(challenge, difficulty, proof);
+        const verifyTime = Date.now() - verifyStart;
+        log(`Verified in ${verifyTime}ms\n`);
+        
+        log('✓ Proof verified successfully!', 'success');
+      } catch (error) {
+        log(`Error: ${error.message}`, 'error');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
+

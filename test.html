@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>crypto-vdf Browser Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .test-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .input-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+            font-size: 0.9em;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 6px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .result.success {
+            border-color: #28a745;
+            background: #f0fff4;
+        }
+        
+        .result.error {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .result-data {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+            line-height: 1.6;
+            color: #212529;
+        }
+        
+        .result-data strong {
+            color: #667eea;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status {
+            padding: 10px;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #856404;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #004085;
+            font-size: 0.95em;
+        }
+        
+        .info-box strong {
+            color: #003366;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 crypto-vdf Test</h1>
+            <p>Verifiable Delay Functions in Your Browser</p>
+        </div>
+        
+        <div class="content">
+            <div class="info-box">
+                <strong>About VDFs:</strong> Verifiable Delay Functions require substantial time to compute but can be quickly verified. 
+                This demo uses small difficulty values for quick testing. In production, use higher values for security.
+            </div>
+            
+            <!-- Pietrzak VDF Test -->
+            <div class="test-section">
+                <h2>Pietrzak VDF</h2>
+                <div class="controls">
+                    <div class="input-group">
+                        <label>Bit Length</label>
+                        <input type="number" id="pietrzak-bits" value="512" min="256" max="2048" step="256">
+                    </div>
+                    <div class="input-group">
+                        <label>Difficulty (must be even, ≥66)</label>
+                        <input type="number" id="pietrzak-difficulty" value="100" min="66" step="2">
+                    </div>
+                    <div class="input-group">
+                        <label>Challenge (hex)</label>
+                        <input type="text" id="pietrzak-challenge" value="deadbeef" placeholder="hex string">
+                    </div>
+                </div>
+                <button id="pietrzak-test" onclick="testPietrzak()">Run Pietrzak VDF Test</button>
+                <div id="pietrzak-result"></div>
+            </div>
+            
+            <!-- Wesolowski VDF Test -->
+            <div class="test-section">
+                <h2>Wesolowski VDF</h2>
+                <div class="controls">
+                    <div class="input-group">
+                        <label>Bit Length</label>
+                        <input type="number" id="wesolowski-bits" value="512" min="256" max="2048" step="256">
+                    </div>
+                    <div class="input-group">
+                        <label>Difficulty</label>
+                        <input type="number" id="wesolowski-difficulty" value="100" min="1">
+                    </div>
+                    <div class="input-group">
+                        <label>Challenge (hex)</label>
+                        <input type="text" id="wesolowski-challenge" value="cafebabe" placeholder="hex string">
+                    </div>
+                </div>
+                <button id="wesolowski-test" onclick="testWesolowski()">Run Wesolowski VDF Test</button>
+                <div id="wesolowski-result"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- <script src="https://unpkg.com/crypto-vdf@1.0.1/dist/browser/vdf.min.js"></script> -->
+    <script src="dist/browser/vdf.min.js"></script>
+    <script>
+        function hexToUint8Array(hex) {
+            hex = hex.replace(/^0x/, '');
+            if (hex.length % 2 !== 0) hex = '0' + hex;
+            const array = new Uint8Array(hex.length / 2);
+            for (let i = 0; i < hex.length; i += 2) {
+                array[i / 2] = parseInt(hex.substr(i, 2), 16);
+            }
+            return array;
+        }
+        
+        function uint8ArrayToHex(array) {
+            return Array.from(array)
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+        
+        function formatTime(ms) {
+            if (ms < 1000) return `${ms.toFixed(2)}ms`;
+            return `${(ms / 1000).toFixed(2)}s`;
+        }
+        
+        async function testPietrzak() {
+            const resultDiv = document.getElementById('pietrzak-result');
+            const button = document.getElementById('pietrzak-test');
+            
+            try {
+                button.disabled = true;
+                button.innerHTML = '<span class="spinner"></span> Running...';
+                
+                const bits = parseInt(document.getElementById('pietrzak-bits').value);
+                const difficulty = parseInt(document.getElementById('pietrzak-difficulty').value);
+                const challengeHex = document.getElementById('pietrzak-challenge').value;
+                const challenge = hexToUint8Array(challengeHex);
+                
+                resultDiv.innerHTML = '<div class="status">Initializing VDF parameters...</div>';
+                
+                // Create VDF
+                const pietrzakVdf = new vdf.PietrzakVDFParams(bits).new();
+                
+                // Check difficulty
+                pietrzakVdf.checkDifficulty(difficulty);
+                
+                resultDiv.innerHTML = '<div class="status">Computing proof (this may take a few seconds)...</div>';
+                
+                // Solve
+                const solveStart = performance.now();
+                const proof = await pietrzakVdf.solve(challenge, difficulty);
+                const solveTime = performance.now() - solveStart;
+                
+                resultDiv.innerHTML = '<div class="status">Verifying proof...</div>';
+                
+                // Verify
+                const verifyStart = performance.now();
+                pietrzakVdf.verify(challenge, difficulty, proof);
+                const verifyTime = performance.now() - verifyStart;
+                
+                // Display results
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <div class="result-title">✓ Pietrzak VDF Test Passed</div>
+                        <div class="result-data">
+                            <strong>Parameters:</strong><br>
+                            Bit Length: ${bits}<br>
+                            Difficulty: ${difficulty}<br>
+                            Challenge: 0x${challengeHex}<br><br>
+                            
+                            <strong>Proof:</strong><br>
+                            ${uint8ArrayToHex(proof)}<br><br>
+                            
+                            <strong>Performance:</strong><br>
+                            Solve Time: ${formatTime(solveTime)}<br>
+                            Verify Time: ${formatTime(verifyTime)}<br>
+                            Proof Size: ${proof.length} bytes
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <div class="result-title">✗ Test Failed</div>
+                        <div class="result-data">
+                            <strong>Error:</strong><br>
+                            ${error.message}
+                        </div>
+                    </div>
+                `;
+            } finally {
+                button.disabled = false;
+                button.innerHTML = 'Run Pietrzak VDF Test';
+            }
+        }
+        
+        async function testWesolowski() {
+            const resultDiv = document.getElementById('wesolowski-result');
+            const button = document.getElementById('wesolowski-test');
+            
+            try {
+                button.disabled = true;
+                button.innerHTML = '<span class="spinner"></span> Running...';
+                
+                const bits = parseInt(document.getElementById('wesolowski-bits').value);
+                const difficulty = parseInt(document.getElementById('wesolowski-difficulty').value);
+                const challengeHex = document.getElementById('wesolowski-challenge').value;
+                const challenge = hexToUint8Array(challengeHex);
+                
+                resultDiv.innerHTML = '<div class="status">Initializing VDF parameters...</div>';
+                
+                // Create VDF
+                const wesolowskiVdf = new vdf.WesolowskiVDFParams(bits).new();
+                
+                // Check difficulty
+                wesolowskiVdf.checkDifficulty(difficulty);
+                
+                resultDiv.innerHTML = '<div class="status">Computing proof (this may take a few seconds)...</div>';
+                
+                // Solve
+                const solveStart = performance.now();
+                const proof = await wesolowskiVdf.solve(challenge, difficulty);
+                const solveTime = performance.now() - solveStart;
+                
+                resultDiv.innerHTML = '<div class="status">Verifying proof...</div>';
+                
+                // Verify
+                const verifyStart = performance.now();
+                wesolowskiVdf.verify(challenge, difficulty, proof);
+                const verifyTime = performance.now() - verifyStart;
+                
+                // Display results
+                resultDiv.innerHTML = `
+                    <div class="result success">
+                        <div class="result-title">✓ Wesolowski VDF Test Passed</div>
+                        <div class="result-data">
+                            <strong>Parameters:</strong><br>
+                            Bit Length: ${bits}<br>
+                            Difficulty: ${difficulty}<br>
+                            Challenge: 0x${challengeHex}<br><br>
+                            
+                            <strong>Proof:</strong><br>
+                            ${uint8ArrayToHex(proof)}<br><br>
+                            
+                            <strong>Performance:</strong><br>
+                            Solve Time: ${formatTime(solveTime)}<br>
+                            Verify Time: ${formatTime(verifyTime)}<br>
+                            Proof Size: ${proof.length} bytes
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <div class="result-title">✗ Test Failed</div>
+                        <div class="result-data">
+                            <strong>Error:</strong><br>
+                            ${error.message}
+                        </div>
+                    </div>
+                `;
+            } finally {
+                button.disabled = false;
+                button.innerHTML = 'Run Wesolowski VDF Test';
+            }
+        }
+        
+        // Check if vdf is loaded
+        window.addEventListener('load', function() {
+            if (typeof vdf === 'undefined') {
+                document.querySelector('.content').innerHTML = `
+                    <div class="result error">
+                        <div class="result-title">✗ Library Not Loaded</div>
+                        <div class="result-data">
+                            <strong>Error:</strong><br>
+                            crypto-vdf library could not be loaded. Make sure dist/browser/vdf.min.js exists.<br>
+                            Run <code>npm run build</code> to build the browser bundle.
+                        </div>
+                    </div>
+                `;
+            } else {
+                console.log('✓ crypto-vdf loaded successfully');
+                console.log('Available:', Object.keys(vdf));
+            }
+        });
+    </script>
+</body>
+</html>
+

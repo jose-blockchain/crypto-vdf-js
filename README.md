@@ -277,8 +277,8 @@ try {
       p.verify(challenge, 100, p_proof, vdf.DISCRIMINANT_256);
       output.textContent += `   Time: ${p_time.toFixed(0)}ms, Size: ${p_proof.length}B\n\n`;
       
-      output.textContent += `📊 Wesolowski is ${(p_time/w_time).toFixed(1)}x faster\n`;
-      output.textContent += `📊 Wesolowski proof is ${((1-w_proof.length/p_proof.length)*100).toFixed(0)}% smaller`;
+      output.textContent += `Wesolowski is ${(p_time/w_time).toFixed(1)}x faster\n`;
+      output.textContent += `Wesolowski proof is ${((1-w_proof.length/p_proof.length)*100).toFixed(0)}% smaller`;
     }
   </script>
 </body>

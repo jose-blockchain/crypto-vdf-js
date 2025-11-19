@@ -1,5 +1,22 @@
 # VDF-JS Release Notes
 
+## Version 1.0.3 - Documentation Improvements (2025-01-XX)
+
+### Changes
+- **Enhanced Documentation**: Made Pietrzak VDF difficulty limitation (≤7000) more explicit in README
+- **Clear Recommendations**: Added explicit recommendation to use Wesolowski VDF for production and difficulties above 7000
+- **Improved Warnings**: Added prominent warnings in API documentation about Pietrzak limitations
+
+### Why This Release
+This release focuses on improving documentation clarity to help users make informed decisions about which VDF to use. The Pietrzak limitation was documented but not prominently featured, which could lead to confusion for users requiring higher difficulties.
+
+### Migration Notes
+- No code changes required
+- If you're using Pietrzak VDF with difficulties > 7000, migrate to Wesolowski VDF
+- Wesolowski VDF is now explicitly recommended for production use
+
+## Version 1.0.2 - Previous Release
+
 ## Version 1.0.0 - Initial Release
 
 ### Overview

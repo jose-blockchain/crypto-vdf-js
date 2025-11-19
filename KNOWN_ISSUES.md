@@ -263,6 +263,6 @@ node tests/manual/test-wesolowski-u64ToBytes-bug.js # Wesolowski regression
 
 ---
 
-**Last Updated:** 2025-11-18  
+**Last Updated:** 2025-01-XX (v1.0.3)  
 **Status:** ✅ **PRODUCTION READY** (with documented Pietrzak limitation)  
-**Recommendation:** Use **Wesolowski VDF** for production applications (no difficulty limit, better browser compatibility)
+**Recommendation:** Use **Wesolowski VDF** for production applications (no difficulty limit, better browser compatibility, smaller proofs, faster verification)

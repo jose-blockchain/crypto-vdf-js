@@ -40,7 +40,7 @@ After publishing to npm, update `test-readme-browser.html` to use the unpkg CDN:
 
 2. To:
    ```html
-   <script src="https://unpkg.com/crypto-vdf@1.0.2/dist/browser/vdf.min.js"></script>
+   <script src="https://unpkg.com/crypto-vdf@1.0.3/dist/browser/vdf.min.js"></script>
    ```
 
 3. Open the file in a browser (you can also serve it or deploy it)
@@ -78,7 +78,7 @@ After npm publication, you can test directly from unpkg:
   <h1>Testing crypto-vdf from unpkg CDN</h1>
   <pre id="output"></pre>
   
-  <script src="https://unpkg.com/crypto-vdf@1.0.2/dist/browser/vdf.min.js"></script>
+  <script src="https://unpkg.com/crypto-vdf@1.0.3/dist/browser/vdf.min.js"></script>
   <script>
     async function test() {
       const output = document.getElementById('output');

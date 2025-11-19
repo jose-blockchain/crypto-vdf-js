@@ -315,6 +315,8 @@ interface VDF {
 
 ### Pietrzak VDF
 
+⚠️ **IMPORTANT LIMITATION**: Pietrzak VDF has a maximum difficulty limit of **7000** in this JavaScript implementation. Difficulties above 7000 will fail verification. This is due to accumulation of rounding errors in extended proof chains. **For production use or difficulties above 7000, use Wesolowski VDF instead.**
+
 ```typescript
 import { PietrzakVDFParams, DISCRIMINANT_256 } from 'crypto-vdf';
 
@@ -324,12 +326,12 @@ const vdf = params.new();
 // ⚠️ Constraints:
 // - Difficulty must be even
 // - Difficulty must be >= 66
-// - Difficulty must be <= 7000 (JavaScript limitation, use Wesolowski for higher)
+// - Difficulty must be <= 7000 (hard limit - use Wesolowski for higher difficulties)
 const proof = await vdf.solve(challenge, 100, DISCRIMINANT_256);
 vdf.verify(challenge, 100, proof, DISCRIMINANT_256);
 ```
 
-### Wesolowski VDF (Recommended)
+### Wesolowski VDF (Recommended for Production)
 
 ```typescript
 import { WesolowskiVDFParams, DISCRIMINANT_512 } from 'crypto-vdf';
@@ -505,7 +507,9 @@ This JavaScript port maintains API compatibility with the Rust version while ada
 
 ### Known Limitations
 
-**Pietrzak VDF**: Currently supports difficulties up to 7000. For difficulties above 7000, use **Wesolowski VDF** which has no such limitation and is the recommended choice for most applications.
+**⚠️ Pietrzak VDF Difficulty Limit**: The Pietrzak VDF implementation has a **hard maximum difficulty of 7000**. This limitation exists due to accumulation of rounding errors in extended proof chains when using JavaScript BigInt arithmetic. Attempts to use difficulties above 7000 will result in verification failures.
+
+**✅ Recommendation**: For production applications or any use case requiring difficulties above 7000, **use Wesolowski VDF instead**. Wesolowski VDF has no difficulty limitations, produces smaller proofs, and has faster verification times. It is the recommended choice for most applications.
 
 ## Contributing
 

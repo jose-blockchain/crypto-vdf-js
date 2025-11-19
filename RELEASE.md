@@ -1,5 +1,16 @@
 # VDF-JS Release Notes
 
+## Version 1.0.5 - ESLint Configuration Fix (2025-01-XX)
+
+### Changes
+- **ESLint Configuration**: Added `.eslintrc.json` configuration file to fix CI linting failures
+  - Enables ESLint to run properly in GitHub Actions
+  - Uses TypeScript ESLint parser and recommended rules
+  - Matches project's ESLint dependencies
+
+### Why This Release
+The CI workflow was failing because ESLint couldn't find a configuration file. This release adds the missing configuration to ensure CI passes successfully.
+
 ## Version 1.0.4 - GitHub CI/CD Workflows (2025-01-XX)
 
 ### Changes

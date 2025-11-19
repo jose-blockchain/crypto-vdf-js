@@ -1,5 +1,18 @@
 # VDF-JS Release Notes
 
+## Version 1.0.4 - GitHub CI/CD Workflows (2025-01-XX)
+
+### Changes
+- **GitHub Actions CI**: Added automated CI workflow for running tests on push/PR
+  - Tests on Node.js 18.x, 20.x, 22.x, 24.x
+  - Runs linter, build, and unit tests
+- **GitHub Actions Publish**: Added automated npm publishing workflow
+  - Triggers on GitHub release creation
+  - Automatically builds, tests, and publishes to npm
+
+### Why This Release
+This release adds automated CI/CD workflows to ensure code quality and streamline the release process. All future releases can be automated through GitHub releases.
+
 ## Version 1.0.3 - Documentation Improvements (2025-01-XX)
 
 ### Changes

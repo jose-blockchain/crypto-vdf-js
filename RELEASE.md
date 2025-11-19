@@ -1,5 +1,16 @@
 # VDF-JS Release Notes
 
+## Version 1.0.6 - Enhanced CI Testing (2025-01-XX)
+
+### Changes
+- **CI Workflow Enhancement**: Added comprehensive VDF tests to GitHub Actions CI
+  - Runs `test-both-vdfs-comprehensive.js` after unit tests
+  - Ensures both Pietrzak and Wesolowski VDFs are tested across multiple difficulties and bit sizes
+  - Provides better coverage in automated testing
+
+### Why This Release
+This release improves CI coverage by including comprehensive manual tests that verify both VDF implementations work correctly across various configurations. This helps catch regressions earlier in the development cycle.
+
 ## Version 1.0.5 - ESLint Configuration Fix (2025-01-XX)
 
 ### Changes

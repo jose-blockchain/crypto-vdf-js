@@ -34,3 +34,6 @@ jobs:
     - name: Run unit tests
       run: npm run test:unit
 
+    - name: Run comprehensive VDF tests
+      run: node tests/manual/test-both-vdfs-comprehensive.js
+

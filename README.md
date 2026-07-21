@@ -32,6 +32,7 @@ This implementation provides two VDF constructions:
 - Full TypeScript type definitions
 - Compatible with the original Rust implementation
 - Production-ready with proper error handling
+- **Time-based difficulty helper** (`estimateDifficulty`) for approximate target delays
 
 ## Installation
 
@@ -346,6 +347,67 @@ const proof = await vdf.solve(challenge, 200, DISCRIMINANT_512);
 vdf.verify(challenge, 200, proof, DISCRIMINANT_512);
 ```
 
+### Estimating difficulty from a target delay
+
+`difficulty` is an iteration count, not seconds. Use `estimateDifficulty` to pick an approximate value for a desired wall-clock delay. Figures are **approximate** (hardware and JS engine vary); measure on your machine when accuracy matters.
+
+```typescript
+import {
+  estimateDifficulty,
+  estimateSolveSeconds,
+  getCalibratedIterationsPerSecond,
+  WesolowskiVDFParams,
+  DISCRIMINANT_256,
+} from 'crypto-vdf';
+
+// ~2 seconds of sequential work on a typical modern Node.js CPU (256-bit)
+const difficulty = estimateDifficulty({ bits: 256, targetSeconds: 2 });
+
+const vdf = new WesolowskiVDFParams(256).new();
+const challenge = new Uint8Array([0xaa, 0xbb, 0xcc]);
+const proof = await vdf.solve(challenge, difficulty, DISCRIMINANT_256);
+vdf.verify(challenge, difficulty, proof, DISCRIMINANT_256);
+
+// Pietrzak: result is even and clamped to [66, 7000]
+const pietrzakDiff = estimateDifficulty({
+  bits: 256,
+  targetSeconds: 1,
+  scheme: 'pietrzak',
+});
+```
+
+#### Tuning for your hardware
+
+1. Run a short `solve()` on the target device and compute iterations/second:
+   `ips = difficulty / (elapsedSeconds)`.
+2. Pass that rate into the helper:
+
+```typescript
+const difficulty = estimateDifficulty({
+  bits: 512,
+  targetSeconds: 5,
+  iterationsPerSecond: 3200, // measured on this machine
+});
+
+// Inverse: approximate seconds for a known difficulty
+const seconds = estimateSolveSeconds({
+  bits: 512,
+  difficulty,
+  iterationsPerSecond: 3200,
+});
+```
+
+Built-in calibration (Node.js, precomputed discriminant, typical modern CPU):
+
+| Bit length | Approx. iterations/second |
+|-----------|---------------------------|
+| 256       | 12 000                    |
+| 512       | 5 000                     |
+| 1024      | 1 800                     |
+| 2048      | 600                       |
+
+Read the table with `getCalibratedIterationsPerSecond(bits)`. Browsers and low-power devices are often several times slower — always re-calibrate for production delay targets.
+
 ## Examples
 
 ### Basic Usage
@@ -423,13 +485,16 @@ Performance depends on:
 - **Difficulty**: Number of sequential squaring operations
 - **Hardware**: CPU speed affects both solving and verification
 
-Typical performance on modern hardware:
+Use `estimateDifficulty({ bits, targetSeconds })` when you care about wall-clock delay rather than a fixed iteration count (see [Estimating difficulty from a target delay](#estimating-difficulty-from-a-target-delay)).
+
+Illustrative times with precomputed discriminants on modern Node.js hardware (order of magnitude; verify locally):
 
 | Bit Length | Difficulty | Solve Time | Verify Time |
 |-----------|-----------|-----------|-------------|
-| 512       | 100       | ~2s       | ~100ms      |
-| 1024      | 100       | ~8s       | ~200ms      |
-| 2048      | 100       | ~30s      | ~500ms      |
+| 256       | 12 000    | ~1s       | ≪100ms      |
+| 512       | 5 000     | ~1s       | ≪100ms      |
+| 1024      | 1 800     | ~1s       | ~100ms      |
+| 2048      | 600       | ~1s       | ~200–500ms  |
 
 **Note**: Solving is intentionally slow (time delay), but verification is fast.
 

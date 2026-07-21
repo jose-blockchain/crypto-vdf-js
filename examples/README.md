@@ -35,6 +35,8 @@ Both examples show:
 - Verifying proofs with `verify(challenge, difficulty, proof)`
 - Measuring performance (solve and verify times)
 
+For production delay targets, see `estimateDifficulty` in the main README (map seconds → iterations, then re-calibrate on your hardware).
+
 ## Requirements
 
 - Node.js 18+ for Node.js examples

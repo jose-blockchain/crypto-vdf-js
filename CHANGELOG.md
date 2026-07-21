@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-07-21
+
+### Added
+
+- `estimateDifficulty({ bits, targetSeconds, scheme?, iterationsPerSecond? })` to map a target wall-clock delay to an iteration count (#16)
+- `estimateSolveSeconds` and `getCalibratedIterationsPerSecond` helpers, plus `CALIBRATED_ITERATIONS_PER_SECOND` table
+- README section on tuning difficulty for hardware
+
 ## [1.1.0] - 2026-05-19
 
 ### Added

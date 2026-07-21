@@ -12,7 +12,7 @@ The crypto-vdf library uses a hybrid testing approach:
 # Default: minimal unit tests + fast VDF smoke (~seconds)
 npm test
 
-# Jest only (utils, discriminant, vdf API — no ClassGroup, no golden solve)
+# Jest only (utils, discriminant, vdf API, difficulty helper — no ClassGroup, no golden solve)
 npm run test:unit
 
 # Optional slow Jest (classgroup + golden verify/solve)
@@ -71,6 +71,10 @@ Located in `tests/*.test.ts`:
 **vdf.test.ts** - VDF API validation
 - Difficulty requirements (Pietrzak: even ≥66, Wesolowski: positive)
 - Instance creation
+
+**difficulty.test.ts** - Time-based difficulty helper
+- `estimateDifficulty` scaling, scheme clamps, overrides
+- `estimateSolveSeconds` / calibration table lookups
 
 **golden-vectors.test.ts** - Golden regression fixtures (fast)
 - Verifies proofs in `tests/fixtures/golden-vectors.json` (no `solve()` in Jest)

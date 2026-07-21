@@ -34,6 +34,8 @@ Requirements: Node.js 18+.
 
 Always pass **precomputed discriminants** (`DISCRIMINANT_256`, etc.) in production. Generating discriminants in pure JS is very slow.
 
+For wall-clock delay targets, prefer `estimateDifficulty({ bits, targetSeconds })` and re-calibrate with `iterationsPerSecond` on the target device (see README).
+
 ## Pull requests
 
 1. Branch from `main` (e.g. `feature/my-change`).

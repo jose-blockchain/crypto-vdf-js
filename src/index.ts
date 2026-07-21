@@ -17,6 +17,17 @@ export { PietrzakVDF, PietrzakVDFParams } from './pietrzak';
 export { WesolowskiVDF, WesolowskiVDFParams } from './wesolowski';
 export { createDiscriminant } from './discriminant';
 export { ClassGroup } from './classgroup';
+export {
+  CALIBRATED_ITERATIONS_PER_SECOND,
+  estimateDifficulty,
+  estimateSolveSeconds,
+  getCalibratedIterationsPerSecond,
+} from './difficulty';
+export type {
+  DifficultyScheme,
+  EstimateDifficultyOptions,
+  EstimateSolveSecondsOptions,
+} from './difficulty';
 
 // Export precomputed discriminants (generated using Rust GMP for maximum performance)
 export {
